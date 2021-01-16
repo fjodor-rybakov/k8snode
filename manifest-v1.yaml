@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-application
+  labels:
+    env: prod
+    app: main
+    tire: backend
+    owner: fedok
+spec:
+  containers:
+    - name: k8s-node-app
+      image: fedok/k8snode:latest
+      ports:
+        - containerPort: 3000
