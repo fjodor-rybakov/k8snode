@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-back-deployment
+  labels:
+    app: my-k8s-application
+
+spec:
+  selector:
+    matchLabels:
+      project: kgb
+
+  template:
+    metadata:
+      labels:
+        project: kgb
+    spec:
+      containers:
+        - name: kgb-backend
+          image: fedok/k8snode:latest
+          ports:
+            - containerPort: 3000

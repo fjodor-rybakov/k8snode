@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-back-deployment-replicas
+  labels:
+    app: my-k8s-application
+    env: prod
+    owner: fedok
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      project: cia
+
+  template:
+    metadata:
+      labels:
+        project: cia
+    spec:
+      containers:
+        - name: cia-backend
+          image: fedok/k8snode:latest
+          ports:
+            - containerPort: 3000
+
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-back-deployment-replicas
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50

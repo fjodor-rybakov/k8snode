@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-back-deployment-replicas
+  labels:
+    app: my-k8s-application
+    env: prod
+    owner: fedok
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      project: cia
+
+  template:
+    metadata:
+      labels:
+        project: cia
+    spec:
+      containers:
+        - name: cia-backend
+          image: fedok/k8snode:latest
+          ports:
+            - containerPort: 3000
