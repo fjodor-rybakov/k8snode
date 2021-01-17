@@ -14,7 +14,7 @@ const server = fastify({
 
 server.get("/", (request, reply) => {
   reply.send({
-    message: "Hello from k8s"
+    message: `Hello from k8s! Ip: ${request.ip}`
   });
 });
 

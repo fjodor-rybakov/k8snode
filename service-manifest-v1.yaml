@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-backend-deployment
+  labels:
+    apps: my-backend-deployment
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: fastify
+
+  template:
+    metadata:
+      labels:
+        project: fastify # Service will look for those PODS Labels !!!
+    spec:
+      containers:
+        - name: fastify-backend
+          image: fedok/k8snode:latest
+          ports:
+            - containerPort: 3000
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-single-pod-serice
+  labels:
+    env: prod
+    owner: fedok
+
+spec:
+  selector:
+    project: fastify # Selecting PODS with those Labels
+  ports:
+    - name: app-listener
+      protocol: TCP
+      port: 3000 # Port on Load Balancer
+      targetPort: 3000 # Port on POD
+  type: LoadBalancer
